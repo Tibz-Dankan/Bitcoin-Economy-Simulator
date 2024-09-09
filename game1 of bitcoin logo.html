@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Breakout Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #logo {
+            position: absolute;
+            width: 50px; /* Half the previous size */
+            height: 50px; /* Half the previous size */
+        }
+
+        .box {
+            position: absolute;
+            width: 200px; /* Twice the previous size */
+            height: 60px; /* Twice the previous size */
+            top: 0;
+        }
+
+        #paddle {
+            position: absolute;
+            width: 150px;
+            height: 20px;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: black;
+        }
+
+        #score {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img id="logo" src="bitcoin logo.png" alt="Bitcoin Logo">
+    <div id="paddle"></div>
+    <div id="score">Score: 0</div>
+</div>
+
+<script>
+    const container = document.querySelector('.container');
+    const logo = document.getElementById('logo');
+    const paddle = document.getElementById('paddle');
+    const scoreDisplay = document.getElementById('score');
+    let score = 0;
+    let boxes = [];
+    let animation;
+    let maxBoxes = 10;
+    let dy = 3; // Logo speed vertically
+
+    // Function to spawn a new box at the top of the screen
+    function spawnBox() {
+        if (boxes.length >= maxBoxes) return;
+
+        const box = document.createElement('div');
+        box.classList.add('box');
+
+        // Random color for the box
+        box.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        box.style.left = `${Math.random() * (window.innerWidth - 200)}px`;
+        container.appendChild(box);
+        boxes.push(box);
+    }
+
+    // Function to bounce the Bitcoin logo around
+    function bounceLogo() {
+        let x = logo.offsetLeft;
+        let y = logo.offsetTop;
+        let dx = 3; // Logo speed horizontally
+
+        function move() {
+            x += dx;
+            y += dy;
+
+            if (x + logo.offsetWidth >= window.innerWidth || x <= 0) {
+                dx = -dx;
+            }
+            if (y <= 0) {
+                dy = -dy;
+            }
+
+            logo.style.left = x + 'px';
+            logo.style.top = y + 'px';
+
+            checkCollision(x, y);
+            checkPaddle(x, y);
+        }
+
+        animation = setInterval(move, 10);
+    }
+
+    // Function to check for collisions between the Bitcoin logo and the boxes
+    function checkCollision(logoX, logoY) {
+        boxes.forEach((box, index) => {
+            const boxRect = box.getBoundingClientRect();
+            const logoRect = logo.getBoundingClientRect();
+
+            if (
+                logoRect.left < boxRect.right &&
+                logoRect.right > boxRect.left &&
+                logoRect.top < boxRect.bottom &&
+                logoRect.bottom > boxRect.top
+            ) {
+                // Bounce back
+                dy = -dy;
+
+                // Remove the box if hit
+                container.removeChild(box);
+                boxes.splice(index, 1);
+
+                // Increase score and update score display
+                score++;
+                scoreDisplay.textContent = `Score: ${score}`;
+
+                // Spawn a new box
+                spawnBox();
+            }
+        });
+    }
+
+    // Function to check if the logo hits the paddle
+    function checkPaddle(logoX, logoY) {
+        const paddleRect = paddle.getBoundingClientRect();
+        const logoRect = logo.getBoundingClientRect();
+
+        if (
+            logoRect.bottom >= paddleRect.top &&
+            logoRect.left < paddleRect.right &&
+            logoRect.right > paddleRect.left
+        ) {
+            dy = -Math.abs(dy); // Bounce up
+        } else if (logoRect.bottom > paddleRect.top + 20) {
+            // Reset the game if the logo misses the paddle
+            score = 0;
+            scoreDisplay.textContent = `Score: ${score}`;
+        }
+    }
+
+    // Add event listeners to move the paddle
+    document.addEventListener('keydown', (e) => {
+        const rect = paddle.getBoundingClientRect();
+        if (e.key === "ArrowLeft" && rect.left > 0) {
+            paddle.style.left = rect.left - 30 + 'px';
+        } else if (e.key === "ArrowRight" && rect.right < window.innerWidth) {
+            paddle.style.left = rect.left + 30 + 'px';
+        }
+    });
+
+    // Initialize game with 3 boxes
+    for (let i = 0; i < 3; i++) {
+        spawnBox();
+    }
+
+    // Start the game
+    bounceLogo();
+</script>
+
+</body>
+</html>
