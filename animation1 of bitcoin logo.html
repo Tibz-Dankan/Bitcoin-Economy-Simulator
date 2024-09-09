@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bouncing Bitcoin Logo</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #logo {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+        }
+
+        button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img id="logo" src="bitcoin logo.png" alt="Bitcoin Logo">
+    <button id="startButton">Start Bouncing</button>
+</div>
+
+<script>
+    const logo = document.getElementById('logo');
+    const button = document.getElementById('startButton');
+    let animation;
+
+    function bounceLogo() {
+        let x = Math.random() * (window.innerWidth - logo.offsetWidth);
+        let y = Math.random() * (window.innerHeight - logo.offsetHeight);
+        let dx = 2;
+        let dy = 2;
+
+        function move() {
+            x += dx;
+            y += dy;
+
+            if (x + logo.offsetWidth >= window.innerWidth || x <= 0) {
+                dx = -dx;
+            }
+            if (y + logo.offsetHeight >= window.innerHeight || y <= 0) {
+                dy = -dy;
+            }
+
+            logo.style.left = x + 'px';
+            logo.style.top = y + 'px';
+        }
+
+        animation = setInterval(move, 10);
+    }
+
+    button.addEventListener('click', () => {
+        if (animation) {
+            clearInterval(animation);
+        }
+        bounceLogo();
+    });
+</script>
+
+</body>
+</html>
