@@ -1,9 +1,7 @@
-// server.js
-
 const express = require("express");
 const { ApolloServer, gql } = require("apollo-server-express");
+const dotenv = require("dotenv");
 
-// Define your type definitions and resolvers
 const typeDefs = gql`
   type Query {
     hello: String
@@ -21,8 +19,8 @@ const typeDefs = gql`
 
   input LnAddressPaymentSendInput {
     amount: Int!
-    fromAccountId: String!
-    toAccountId: String!
+    lnAddress: String!
+    walletId: String!
   }
 
   input OnChainAddressCurrentInput {
@@ -77,7 +75,7 @@ const resolvers = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            "X-API-KEY": `${token}`,
           },
           body: JSON.stringify({
             query: mutation,
@@ -85,7 +83,10 @@ const resolvers = {
           }),
         });
 
+        console.log("status", response.status);
+
         const text = await response.text();
+        console.log("response text:", text);
         const data = JSON.parse(text);
 
         if (response.ok) {
@@ -112,6 +113,8 @@ const resolvers = {
 
 const startServer = async () => {
   const app = express();
+
+  dotenv.config();
 
   const server = new ApolloServer({ typeDefs, resolvers });
   await server.start();

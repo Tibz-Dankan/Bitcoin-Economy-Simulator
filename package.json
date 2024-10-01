@@ -4,13 +4,13 @@
   "description": "graphql API test",
   "main": "payment.js",
   "scripts": {
-  "start": "nodemon server.js"
-},
-
+    "start": "nodemon server.js"
+  },
   "author": "Nnamdi",
   "license": "ISC",
   "dependencies": {
     "apollo-server-express": "^3.13.0",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "graphql": "^16.9.0",
     "graphql-request": "^7.1.0"
