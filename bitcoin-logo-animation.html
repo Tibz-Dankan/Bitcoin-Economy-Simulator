@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bitcoin Logo Animation</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      nav {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        color: white;
+        padding: 20px 10px;
+        text-align: center;
+        border-bottom: 1px solid #868e96;
+      }
+
+      nav button {
+        padding: 10px 20px;
+        background-color: orange;
+        border: none;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 4px;
+        font-weight: bold;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+      }
+
+      .div-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 120px;
+        min-height: 60vh;
+      }
+
+      .square {
+        width: 200px;
+        height: 200px;
+        position: relative;
+      }
+
+      #div1 {
+        background-color: purple;
+      }
+
+      #div2 {
+        background-color: blue;
+      }
+
+      img {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+        transition: all 200ms ease-in-out;
+      }
+
+      .visible {
+        display: block;
+      }
+
+      footer {
+        position: fixed;
+        bottom: 0px;
+        left: 0px;
+        width: 100%;
+        color: #495057;
+        padding: 20px 10px;
+        text-align: start;
+        border: none;
+        border-top: 1px solid #868e96;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <button id="toggleButton">Move Bitcoin Logo</button>
+    </nav>
+
+    <div class="div-container">
+      <div class="square" id="div1"></div>
+      <div class="square" id="div2"></div>
+    </div>
+
+    <footer>
+      <p>Developed by Dankan.T</p>
+    </footer>
+
+    <img src="bitcoin-logo.png" id="bitcoinLogo" />
+
+    <script>
+      const button = document.getElementById("toggleButton");
+      const bitcoinLogo = document.getElementById("bitcoinLogo");
+      const div1 = document.getElementById("div1");
+      const div2 = document.getElementById("div2");
+
+      let isInDiv1 = true;
+
+      button.addEventListener("click", function () {
+        bitcoinLogo.classList.add("visible");
+
+        if (isInDiv1) {
+          moveImage(div2, div1);
+        } else {
+          moveImage(div1, div2);
+        }
+
+        isInDiv1 = !isInDiv1;
+      });
+
+      function moveImage(fromDiv, toDiv) {
+        const fromRect = fromDiv.getBoundingClientRect();
+        const toRect = toDiv.getBoundingClientRect();
+
+        const deltaX = toRect.left - fromRect.left;
+        const deltaY = toRect.top - fromRect.top;
+
+        bitcoinLogo.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+
+        setTimeout(() => {
+          bitcoinLogo.style.transform = "translate(-50%, -50%)";
+          toDiv.appendChild(bitcoinLogo);
+        }, 150);
+      }
+    </script>
+  </body>
+</html>
