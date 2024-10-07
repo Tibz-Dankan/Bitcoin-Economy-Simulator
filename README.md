@@ -59,6 +59,8 @@ API_TOKEN=blink_xxxxx
 
    ```
 
+   Before running the command to transfer stats, ensure that the server is up and running
+
    At this point application server should be running and accessible via url **http://localhost:4000/graphql**
 
 > Note: The application server port number is **4000**
