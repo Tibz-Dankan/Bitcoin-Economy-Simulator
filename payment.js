@@ -1,5 +1,4 @@
-// Set your GraphQL endpoint URL
-const url = "https://api.blink.sv/graphql";
+const url = "http://localhost:4000/graphql";
 const token = process.env.YOUR_API_TOKEN;
 
 // Define the mutation
@@ -19,13 +18,12 @@ mutation LnAddressPaymentSend($input: LnAddressPaymentSendInput!) {
 // Send the request
 const variables = {
   input: {
-    fromAccountId: "mmaken@blink.sv", // sender's account ID
-    toAccountId: "mmak3n@blink.sv", //  recipient's account ID
-    amount: 100, // Amount in satoshis
+    amount: 100,
+    walletId: "fe20ccad-4c7e-4652-8e3c-af3dc5234009",
+    lnAddress: "mmak3n@blink.sv",
   },
 };
 
-// Send the request
 fetch(url, {
   method: "POST",
   headers: {

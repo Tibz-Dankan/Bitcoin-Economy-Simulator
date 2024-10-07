@@ -51,6 +51,14 @@ API_TOKEN=blink_xxxxx
 
    ```
 
+5. **Transfer sats**:
+
+   ```sh
+
+   npm run pay
+
+   ```
+
    At this point application server should be running and accessible via url **http://localhost:4000/graphql**
 
 > Note: The application server port number is **4000**
